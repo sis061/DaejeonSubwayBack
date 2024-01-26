@@ -22,13 +22,17 @@ const getAPI = async () => {
   }
 };
 
+app.get(`/`, (req, res) => {
+  res.send("Hello, this is the root path!");
+});
+
 app.get(`/arrivalinfo/:id`, async (req, res) => {
   try {
-    await getAPI(req).then((response) => {
-      res.send(response.data);
-    });
+    const response = await getAPI(req);
+    res.send(response.data);
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    console.error(error.message); // 에러 메시지를 출력
+    res.status(error.response ? error.response.status : 500).json({ error: error.message });
   }
 });
 
